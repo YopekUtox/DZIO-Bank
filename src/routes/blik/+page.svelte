@@ -1,53 +1,116 @@
-<script>
+<script lang='ts'>
+	/* Import assets */
 	import config from '$lib/images/config.png';
 	import newCode from '$lib/images/new_code.png';
 	import phone from '$lib/images/phone.png';
 	import copy from '$lib/images/copy.png';
+    import {onMount} from 'svelte'
+	import { writable } from 'svelte/store';
+
+    const fetchBLIK = () => { 
+        return (Math.floor(Math.random() * (99_99_99 - 10_00_00) + 10_00_00)).toString()
+    };
+    let currentBlik = writable(' ');
+    let blik = '';
+    let secondsRemaining: number = 0; 
+    let percentage: number = 0;
+    let firstPart: string = '.   .   .';
+    let secondPart: string = '.   .   .';
+    const maxSeconds = 5;
+    currentBlik.subscribe((value) => {
+        blik = value;
+        firstPart = value.slice(0, 3);
+        secondPart = value.slice(3,6);
+    }, (val) => {firstPart = '.   .   .'; secondPart = '.   .   .'})
+    onMount(() => {
+        
+        // currentBlik will be fetched from API
+        currentBlik.update(fetchBLIK);
+        // secondsRemaining will be fetched from API
+        secondsRemaining = 5;
+
+        percentage = secondsRemaining / maxSeconds;
+        let expirationInterval = setInterval(() => {
+            if (secondsRemaining === 0) {
+                currentBlik.update(fetchBLIK);
+                secondsRemaining = maxSeconds;
+                percentage = secondsRemaining / maxSeconds;
+                return;
+            }
+            secondsRemaining -= 1;
+            percentage = secondsRemaining / maxSeconds;
+        }, 1000);
+    })
+    
+    const onRefreshCodeClick = () => {
+        currentBlik.update(fetchBLIK);
+        secondsRemaining = maxSeconds;
+        percentage = secondsRemaining / maxSeconds;
+    }
+
+    interface ICopyMessages {
+        "default": string,
+        "success": string,
+        "error": string,
+    }
+    const copyMessages: ICopyMessages = {
+        "default": "Kopiuj kod",
+        "success": "Kod skopiowany",
+        "error": "Błąd kopiowania"
+    }
+    let currentMessage: "default" | "success" | "error" = "default"
+    const onCopyCodeClick = async () => {
+        const message = await navigator.clipboard.writeText(blik).then(() => "success" ).catch(() => "error");
+        currentMessage = message as "success" | "error" ;
+        setTimeout(() => currentMessage = 'default', 3000);
+    }
+
 </script>
 
 <section>
-	<p class='title'>Kod BLIK wygaśnie za</p>
-    <div id='blik_expiration_container'> 
-        
-        <div class="meter" id='expire_bar'>
-            <span style="width: 100%; --scale_x_val: {90}%"></span>
-        </div>
-        <span id='time_left'> 90 s</span>
-    </div>
+	<p class="title">Kod BLIK wygaśnie za</p>
+	<div id="blik_expiration_container">
+		<div class="meter" id="expire_bar">
+			<span id='progress_bar' style="width: 100%; --scale_x_val: {percentage}" />
+		</div>
+		<span id="time_left"> {secondsRemaining} s</span>
+	</div>
 	<div id="blik_number_container">
-        <p class='title'>Kod BLIK</p>
-        <div id='numbers'>
-            <span class='number_part'> 213 </span>
-            <span class='number_part'> 769 </span>
-        </div>
+		<p class="title">Kod BLIK</p>
+		<div id="numbers">
+			<span class="number_part"> {#if firstPart} {firstPart} {:else} .   .   . {/if} </span>
+			<span class="number_part"> {#if secondPart} {secondPart} {:else} .   .   . {/if}</span>
+		</div>
 	</div>
 
 	<div id="blik_actions_container">
 		<div class="blik_row">
-			<button type='button' id="new_blik_code" class="blik_button">
+			<button type="button" id="new_blik_code" class="blik_button" on:click={onRefreshCodeClick}>
 				<img src={newCode} alt="Wygeneruj nowy kod" class="button_icon" />
-				<span class='button_desc'>Nowy kod</span>
+				<span class="button_desc">Nowy kod</span>
 			</button>
-			<button type='button' id="copy_blik_code" class="blik_button">
+			<button type="button" id="copy_blik_code" class="blik_button" on:click={onCopyCodeClick}>
 				<img src={copy} alt="Skopiuj kod" class="button_icon" />
-				<span class='button_desc'>Kopiuj kod</span>
+				<span class="button_desc">{copyMessages[currentMessage]}</span>
 			</button>
 		</div>
 		<div class="blik_row">
-			<button type='button' id="config_icon" class="blik_button">
+			<button type="button" id="config_icon" class="blik_button">
 				<img src={config} alt="Konfiguracja" class="button_icon" />
 			</button>
-			<button type='button' id="blik_for_phone" class="blik_button">
+			<button type="button" id="blik_for_phone" class="blik_button">
 				<img src={phone} alt="Na telefon" class="button_icon" />
-				<span class='button_desc'>Blik na telefon</span>
+				<span class="button_desc">Blik na telefon</span>
 			</button>
 		</div>
 	</div>
-
 </section>
 <footer>
-    <a href='https://blik.com/pierwsze-kroki-z-blikiem' id='about_blik' class='title'>Jak działa BLIK?</a>
+	<a href="https://blik.com/pierwsze-kroki-z-blikiem" id="about_blik" class="title"
+		>Jak działa BLIK?</a
+	>
 </footer>
+
 <style lang="sass">
 
 $font-size: 1.3rem
@@ -141,6 +204,7 @@ section
     padding: 5px
 
     & > span
+        
         display: block
         height: 100%
         border-radius: 20px
