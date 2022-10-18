@@ -1,10 +1,13 @@
 <script>
 	import top_black_background from '$lib/images/top_black_background.png';
+	
+
 </script>
 
 <header>
 	<img src={top_black_background} alt="" class="image_background" />
-	<div id="title_container">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div id="title_container" on:click={() => location.href = '/'}>
 		<span class="title"> DZIO</span>
 		<span class="subtitle"> Bank</span>
 	</div>
