@@ -12,11 +12,12 @@
     };
     let currentBlik = writable(' ');
     let blik = '';
-    let secondsRemaining: number = 0; 
-    let percentage: number = 0;
+    const maxSeconds = 120;
+    let secondsRemaining: number = 5;
+    let percentage: number = secondsRemaining / maxSeconds;
     let firstPart: string = '.   .   .';
     let secondPart: string = '.   .   .';
-    const maxSeconds = 5;
+    
     currentBlik.subscribe((value) => {
         blik = value;
         firstPart = value.slice(0, 3);
@@ -27,7 +28,6 @@
         // currentBlik will be fetched from API
         currentBlik.update(fetchBLIK);
         // secondsRemaining will be fetched from API
-        secondsRemaining = 5;
 
         percentage = secondsRemaining / maxSeconds;
         let expirationInterval = setInterval(() => {
@@ -73,7 +73,7 @@
 		<div class="meter" id="expire_bar">
 			<span id='progress_bar' style="width: 100%; --scale_x_val: {percentage}" />
 		</div>
-		<span id="time_left"> {secondsRemaining} s</span>
+		<span id="time_left"> {(secondsRemaining.toString().padStart(3, '\u00A0'))} s</span>
 	</div>
 	<div id="blik_number_container">
 		<p class="title">Kod BLIK</p>
@@ -94,6 +94,7 @@
 				<span class="button_desc">{copyMessages[currentMessage]}</span>
 			</button>
 		</div>
+        <!--
 		<div class="blik_row">
 			<button type="button" id="config_icon" class="blik_button">
 				<img src={config} alt="Konfiguracja" class="button_icon" />
@@ -103,6 +104,7 @@
 				<span class="button_desc">Blik na telefon</span>
 			</button>
 		</div>
+        -->
 	</div>
 </section>
 <footer>
@@ -127,7 +129,12 @@ section
     display: grid
     grid-template-rows: repeat(auto-fit, minmax(100px,1fr))
     align-items: center
+    grid-gap: 1rem
     padding: 1rem
+    @media screen and (min-width: 768px) 
+        justify-content: center
+        grid-template-columns: repeat(1, minmax(500px, 700px))
+    
 .blik_button
     background: #3db8f519
     font: $font-size sans-serif
@@ -143,6 +150,7 @@ section
     align-items: center
     padding: 0.8rem
     grid-gap: 0.5rem
+    cursor: pointer
     
 
 #blik_actions_container
@@ -212,6 +220,7 @@ section
         overflow: hidden
 
         &:after
+            transition: transform 1s linear 
             content: ""
             position: absolute
             top: 0

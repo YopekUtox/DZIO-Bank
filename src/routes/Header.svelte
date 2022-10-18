@@ -7,9 +7,9 @@
 <header>
 	<img src={top_black_background} alt="" class="image_background" />
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div id="title_container" on:click={() => location.href = '/'}>
-		<span class="title"> DZIO</span>
-		<span class="subtitle"> Bank</span>
+	<div id="title_container" >
+		<span class="title" on:click={() => location.href = '/'}> DZIO</span>
+		<span class="subtitle" on:click={() => location.href = '/'}> Bank</span>
 	</div>
 </header>
 
@@ -33,14 +33,16 @@
 		top: 20%
 		text-align: center
 	
-	#title_container .title 
-		color: white
-		font-size: 2rem
-		display: block
-	
-	#title_container .subtitle 
-		font-size: 1.6rem
-		color: #3fbdf1
-		display: block
+	#title_container 
+		.title 
+			color: white
+			font-size: 2rem
+			display: block
+			cursor: pointer
+		.subtitle 
+			font-size: 1.6rem
+			color: #3fbdf1
+			display: block
+			cursor: pointer
 
 </style>
