@@ -3,3 +3,4 @@
 - [ ] - Ogarnięcie, żeby fingerprint był tylko na platformach mobilnych
 - [x] - Zoptymalizowanie strony BLIK pod PC (arkusze styli)
 - [x] - Skrypt obliczający czas na wygaśnięcie kodu BLIK
+- [ ] - Ogarnięcie strony dla tych, co zapomnieli kodu
