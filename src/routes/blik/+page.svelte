@@ -1,85 +1,104 @@
-<script lang='ts'>
+<script lang="ts">
 	/* Import assets */
 	import config from '$lib/images/config.png';
 	import newCode from '$lib/images/new_code.png';
 	import phone from '$lib/images/phone.png';
 	import copy from '$lib/images/copy.png';
-    import {onMount} from 'svelte'
+	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
-    const fetchBLIK = () => { 
-        return (Math.floor(Math.random() * (99_99_99 - 10_00_00) + 10_00_00)).toString()
-    };
-    let currentBlik = writable(' ');
-    let blik = '';
-    const maxSeconds = 120;
-    let secondsRemaining: number = 5;
-    let percentage: number = secondsRemaining / maxSeconds;
-    let firstPart: string = '.   .   .';
-    let secondPart: string = '.   .   .';
-    
-    currentBlik.subscribe((value) => {
-        blik = value;
-        firstPart = value.slice(0, 3);
-        secondPart = value.slice(3,6);
-    }, (val) => {firstPart = '.   .   .'; secondPart = '.   .   .'})
-    onMount(() => {
-        
-        // currentBlik will be fetched from API
-        currentBlik.update(fetchBLIK);
-        // secondsRemaining will be fetched from API
+	const fetchBLIK = () => {
+		// currentBlik will be fetched from API
+		return Math.floor(Math.random() * (99_99_99 - 10_00_00) + 10_00_00).toString();
+	};
+	let currentBlik = writable(' ');
+	let blik = '';
+	const maxSeconds = 120;
+	let secondsRemaining: number = 5;
+	let percentage: number = secondsRemaining / maxSeconds;
+	let firstPart: string = '.   .   .';
+	let secondPart: string = '.   .   .';
+	let transitionDuration = 1;
+	currentBlik.subscribe(
+		(value) => {
+			blik = value;
+			firstPart = value.slice(0, 3);
+			secondPart = value.slice(3, 6);
+		},
+		(val) => {
+			firstPart = '.   .   .';
+			secondPart = '.   .   .';
+		}
+	);
+	onMount(() => {
+		
+		currentBlik.update(fetchBLIK);
+		// secondsRemaining will be fetched from API
 
-        percentage = secondsRemaining / maxSeconds;
-        let expirationInterval = setInterval(() => {
-            if (secondsRemaining === 0) {
-                currentBlik.update(fetchBLIK);
-                secondsRemaining = maxSeconds;
-                percentage = secondsRemaining / maxSeconds;
-                return;
-            }
-            secondsRemaining -= 1;
-            percentage = secondsRemaining / maxSeconds;
-        }, 1000);
-    })
-    
-    const onRefreshCodeClick = () => {
-        currentBlik.update(fetchBLIK);
-        secondsRemaining = maxSeconds;
-        percentage = secondsRemaining / maxSeconds;
-    }
+		percentage = secondsRemaining / maxSeconds;
+		let expirationInterval = setInterval(() => {
+			transitionDuration = 1;
+			if (secondsRemaining === 0) {
+				blikUpdate();
+				return;
+			}
+			secondsRemaining -= 1;
+			percentage = secondsRemaining / maxSeconds;
+		}, 1000);
+	});
 
-    interface ICopyMessages {
-        "default": string,
-        "success": string,
-        "error": string,
-    }
-    const copyMessages: ICopyMessages = {
-        "default": "Kopiuj kod",
-        "success": "Kod skopiowany",
-        "error": "Błąd kopiowania"
-    }
-    let currentMessage: "default" | "success" | "error" = "default"
-    const onCopyCodeClick = async () => {
-        const message = await navigator.clipboard.writeText(blik).then(() => "success" ).catch(() => "error");
-        currentMessage = message as "success" | "error" ;
-        setTimeout(() => currentMessage = 'default', 3000);
-    }
+	const onRefreshCodeClick = () => {
+		blikUpdate();
+	};
 
+	interface ICopyMessages {
+		default: string;
+		success: string;
+		error: string;
+	}
+	const copyMessages: ICopyMessages = {
+		default: 'Kopiuj kod',
+		success: 'Kod skopiowany',
+		error: 'Błąd kopiowania'
+	};
+	let currentMessage: 'default' | 'success' | 'error' = 'default';
+	const onCopyCodeClick = async () => {
+		const message = await navigator.clipboard
+			.writeText(blik)
+			.then(() => 'success')
+			.catch(() => 'error');
+		currentMessage = message as 'success' | 'error';
+		setTimeout(() => (currentMessage = 'default'), 3000);
+	};
+
+	function blikUpdate() {
+		currentBlik.update(fetchBLIK);
+		secondsRemaining = maxSeconds;
+		percentage = secondsRemaining / maxSeconds;
+		transitionDuration = 0.1;
+	}
 </script>
 
 <section>
 	<p class="title">Kod BLIK wygaśnie za</p>
 	<div id="blik_expiration_container">
 		<div class="meter" id="expire_bar">
-			<span id='progress_bar' style="width: 100%; --scale_x_val: {percentage}" />
+			<span
+				id="progress_bar"
+				style="width: 100%; --scale_x_val: {percentage}; --transition_duration: {transitionDuration}s"
+			/>
 		</div>
-		<span id="time_left"> {(secondsRemaining.toString().padStart(3, '\u00A0'))} s</span>
+		<span id="time_left"> {secondsRemaining.toString().padStart(3, '\u00A0')} s</span>
 	</div>
 	<div id="blik_number_container">
 		<p class="title">Kod BLIK</p>
 		<div id="numbers">
-			<span class="number_part"> {#if firstPart} {firstPart} {:else} .   .   . {/if} </span>
-			<span class="number_part"> {#if secondPart} {secondPart} {:else} .   .   . {/if}</span>
+			<span class="number_part">
+				{#if firstPart} {firstPart} {:else} . . . {/if}
+			</span>
+			<span class="number_part">
+				{#if secondPart} {secondPart} {:else} . . . {/if}</span
+			>
 		</div>
 	</div>
 
@@ -94,7 +113,7 @@
 				<span class="button_desc">{copyMessages[currentMessage]}</span>
 			</button>
 		</div>
-        <!--
+		<!--
 		<div class="blik_row">
 			<button type="button" id="config_icon" class="blik_button">
 				<img src={config} alt="Konfiguracja" class="button_icon" />
@@ -169,12 +188,6 @@ section
             flex: 2
         #copy_blik_code
             flex: 2
-        #config_icon
-            flex: 1
-            img
-                height: auto
-        #blik_for_phone
-            flex: 4
         
 
 #blik_number_container
@@ -220,7 +233,7 @@ section
         overflow: hidden
 
         &:after
-            transition: transform 1s linear 
+            transition: transform var(--transition_duration) linear 
             content: ""
             position: absolute
             top: 0
