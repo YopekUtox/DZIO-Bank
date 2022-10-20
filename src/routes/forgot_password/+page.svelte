@@ -16,6 +16,7 @@
 </section>
 
 <style lang='sass'>
+@import '../../styles/vars'
 section , #reset_password_form
     overflow: hidden
     position: relative
@@ -26,22 +27,22 @@ section , #reset_password_form
     grid-gap: 1rem
 .label
     display: block
-    font: 1.5rem sans-serif
-    color: #3fbdf1
+    font: 1.5rem $primary-font
+    color: $primary_color
     margin: 0
     text-align: left
 #user_email_input
-    font: 1.5rem sans-serif
+    font: 1.5rem $primary-font
     padding: 0.4rem
     border-radius: 0.4rem
     border-style: solid
-    border-color: #3fbdf1
+    border-color: $primary_color
     &:focus, &:active
         outline: none
 #reset_password_submit
     background: #3db8f519
-    font: 1.2rem sans-serif
-    color: #3fbdf1
+    font: 1.2rem $primary-font
+    color: $primary_color
     border: none
     outline: none
     min-height: 80px
