@@ -211,7 +211,7 @@ section
     #expire_bar
         margin: 0
     #time_left
-        font-size: 1.3rem
+        font: 1.3rem $primary-font
         color: $primary-color
 .meter
     flex: 10
