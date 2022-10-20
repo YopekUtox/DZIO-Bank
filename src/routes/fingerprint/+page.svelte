@@ -12,6 +12,7 @@
     <a href="/code"> Tym razem użyj kodu dostępu</a>
 </footer>
 <style lang="sass">
+@import '../../styles/vars'
 #finger_print_unlock
     display: flex
     flex-flow: column nowrap
@@ -20,7 +21,7 @@
     grid-gap: 2rem
 #title, a
     text-align: center
-    font-size: 1.5rem
+    font: 1.5rem $primary-font
 img
     padding: 5rem
 footer
@@ -31,5 +32,5 @@ footer
         margin: 2rem
         font-weight: bold
         text-decoration: none
-        color: #3fbdf1ff
+        color: $primary-color
 </style>
