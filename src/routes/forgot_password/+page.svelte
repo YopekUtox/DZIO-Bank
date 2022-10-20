@@ -33,6 +33,11 @@ section , #reset_password_form
 #user_email_input
     font: 1.5rem sans-serif
     padding: 0.4rem
+    border-radius: 0.4rem
+    border-style: solid
+    border-color: #3fbdf1
+    &:focus, &:active
+        outline: none
 #reset_password_submit
     background: #3db8f519
     font: 1.2rem sans-serif
