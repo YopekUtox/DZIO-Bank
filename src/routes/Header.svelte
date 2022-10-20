@@ -14,6 +14,7 @@
 </header>
 
 <style lang="sass">
+	@import '../styles/vars'
 	header 
 		overflow: hidden
 		position: relative
@@ -39,7 +40,7 @@
 			font-size: 2rem
 		.subtitle 
 			font-size: 1.6rem
-			color: #3fbdf1
+			color: $primary_color
 
 		.title, .subtitle
 			display: block

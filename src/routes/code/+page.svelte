@@ -76,16 +76,19 @@
 	</span>
 </div>
 <footer>
-	<a id="forgot_password" href='/forgot_password'>Nie pamiętasz kodu dostępu?</a>
+	<a id="forgot_password" href='/forgot_password'>Nie pamiętasz kodu dostępu? <br />Kliknij tutaj</a>
 </footer>
 
 <style lang="sass">
-  
+@import '../../styles/vars'
 
 #title, #forgot_password
-	display: block
 	text-align: center
-	font-size: 1.5rem
+	font: 1.5rem $primary-font
+#forgot_password
+	text-decoration: none
+footer
+	text-align: center
 .password_entry_container
 	overflow: hidden
 	display: flex
@@ -96,7 +99,7 @@
 	justify-content: center
 	padding: 0
 	user-select: none
-	color: #9bdcf8
+	color: $secondary_color
 	transition: transform .5s
 	transform: scale(1)
 	.password_entry
@@ -106,7 +109,7 @@
 	.active
 		transform: scale(2)
 	.filled
-		color: #3fbdf1ff !important
+		color: $primary_color
 .entries_container
 	display: grid
 	grid-template-rows: repeat(4, 100px)
@@ -119,7 +122,7 @@
 	grid-gap: 1rem
 	.entry
 		transition: background-color .5s
-		font-size: 2rem
+		font: 2rem $primary-font
 		cursor: pointer
 		width: 100%
 		height: 100%
@@ -148,7 +151,7 @@
 			align-items: center
 			position: relative
 		&[data-value]:hover
-			background-color: #9bdcf8
+			background-color: $secondary-color
 
 
 </style>

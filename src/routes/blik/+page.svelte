@@ -135,11 +135,11 @@
 <style lang="sass">
 
 $font-size: 1.3rem
-
+@import '../../styles/vars'
 .title
     display: block
-    font: 1.5rem sans-serif
-    color: #3fbdf1ff
+    font: 1.5rem $primary-font
+    color: $primary-color
     margin: 0
     text-align: left
 section 
@@ -156,8 +156,8 @@ section
     
 .blik_button
     background: #3db8f519
-    font: $font-size sans-serif
-    color: #3fbdf1ff
+    font: $font-size $primary-font
+    color: $primary-color
     border: none
     outline: none
     min-height: 80px
@@ -199,8 +199,8 @@ section
     .title
         align-self: flex-start
     #numbers
-        font: 4.5rem sans-serif
-        color: #3fbdf1ff
+        font: 4.5rem $primary-font
+        color: $primary-color
 
 #blik_expiration_container
     display: flex
@@ -212,7 +212,7 @@ section
         margin: 0
     #time_left
         font-size: 1.3rem
-        color: #3fbdf1ff
+        color: $primary-color
 .meter
     flex: 10
     box-sizing: content-box
@@ -220,7 +220,7 @@ section
 
     position: relative
 
-    background-color:  #9bdcf8
+    background-color:  $secondary-color
     border-radius: 25px
     padding: 5px
 
@@ -240,7 +240,7 @@ section
             left: 0
             bottom: 0
             right: 0
-            background: #3fbdf1ff
+            background: $primary-color
             z-index: 1
             animation: move 2s linear infinite
             transform-origin: left
@@ -253,7 +253,7 @@ section
     margin: 2rem
     font-weight: bold
     text-decoration: none
-    color: #3fbdf1ff
+    color: $primary-color
 
 
 
