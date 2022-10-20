@@ -127,7 +127,7 @@
 	</div>
 </section>
 <footer>
-	<a href="https://blik.com/pierwsze-kroki-z-blikiem" id="about_blik" class="title"
+	<a href="https://blik.com/pierwsze-kroki-z-blikiem" id="about_blik" class="title" target="_blank"
 		>Jak działa BLIK?</a
 	>
 </footer>
