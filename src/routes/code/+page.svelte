@@ -1,7 +1,8 @@
 <script>
 	import fingerPrintImage from '$lib/images/finger_print.png';
 	import { onMount } from 'svelte';
-
+	// @ts-ignore
+	import DeviceDetector from "svelte-device-detector";
 	/**
 	 * @type {NodeListOf<Element>}
 	 */
@@ -59,71 +60,95 @@
 <div class="entries_container">
 	{#each spanList as span}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<span class="entry" on:click={handlePasswordInput} data-value={span === ' ' ? null : span}>
+		<button type='button' class="entry" on:click={handlePasswordInput} data-value={span === ' ' ? null : span}>
 			<span class="entry_content">{span}</span>
-		</span>
+		</button>
 	{/each}
 	<span class="entry">
-		<a href="/fingerprint" class="entry_content">
-			<img src={fingerPrintImage} alt="fngprint" class="entry_image" /></a
-		>
+		<DeviceDetector showInDevice='mobile'>
+			<a href="/fingerprint" class="entry_content">
+				<img src={fingerPrintImage} alt="fngprint" class="entry_image" /></a
+			>
+		</DeviceDetector>
+		<DeviceDetector showInDevice='mobile'>
+			&nbsp;
+		</DeviceDetector>
 	</span>
 </div>
 <footer>
-	<p id="forgot_password">Nie pamiętasz kodu dostępu?</p>
+	<a id="forgot_password" href='/forgot_password'>Nie pamiętasz kodu dostępu?</a>
 </footer>
 
 <style lang="sass">
+  
 
 #title, #forgot_password
-    text-align: center
-    font-size: 1.5rem
+	display: block
+	text-align: center
+	font-size: 1.5rem
 .password_entry_container
-    overflow: hidden
-    display: flex
-    flex-flow: row nowrap
-    grid-gap: 2rem
-    font-size: 2rem
-    align-items: center
-    justify-content: center
-    padding: 0
-    user-select: none
-    color: #9bdcf8
-    .password_entry
-        font-size: 8rem
-    .active
-        transform: scale(2)
-    .filled
-        color: #3fbdf1ff !important
+	overflow: hidden
+	display: flex
+	flex-flow: row nowrap
+	grid-gap: 2rem
+	font-size: 2rem
+	align-items: center
+	justify-content: center
+	padding: 0
+	user-select: none
+	color: #9bdcf8
+	transition: transform .5s
+	transform: scale(1)
+	.password_entry
+		font-size: 8rem
+		transition: transform .5s
+		
+	.active
+		transform: scale(2)
+	.filled
+		color: #3fbdf1ff !important
 .entries_container
-    display: grid
-    grid-template-rows: repeat(4, 100px)
-    grid-template-columns: repeat(3, 100px)
-    align-items: center
-    justify-items: center
-    justify-content: center
-    padding: 0
-    margin: 0
-    .entry
-        font-size: 2rem
-        cursor: pointer
-        width: 100%
-        height: 100%
-        display: flex
-        flex-flow: row nowrap
-        align-items: center
-        justify-content: center
-        a
-            padding: 1rem
-        a:has(.entry_image)
-            cursor: pointer
-        .entry_image
-            max-width: 100%
-            max-height: 100%
-            object-fit: contain
-        &:not([data-value])
-            cursor: context-menu            
-        &[data-value]:hover
-            background-color: yellow
+	display: grid
+	grid-template-rows: repeat(4, 100px)
+	grid-template-columns: repeat(3, 100px)
+	align-items: center
+	justify-items: center
+	justify-content: center
+	padding: 0
+	margin: 0
+	grid-gap: 1rem
+	.entry
+		transition: background-color .5s
+		font-size: 2rem
+		cursor: pointer
+		width: 100%
+		height: 100%
+		display: flex
+		flex-flow: row nowrap
+		align-items: center
+		justify-content: center
+		background-color: transparent
+		border: none
+		position: relative
+		a
+			padding: 1rem
+		a:has(.entry_image)
+			cursor: pointer
+		.entry_image
+			max-width: 100%
+			max-height: 100%
+			object-fit: contain
+		&:not([data-value])
+			cursor: context-menu            
+		&[data-value]
+			border-radius: 1rem
+			display: flex
+			flex-flow: row nowrap
+			justify-content: center
+			align-items: center
+			position: relative
+		&[data-value]:hover
+			background-color: #9bdcf8
+
 
 </style>
