@@ -32,7 +32,7 @@ section , #reset_password_form
     margin: 0
     text-align: left
 #user_email_input
-    font: 1.5rem $primary-font
+    font: 1.6rem $primary-font
     padding: 0.4rem
     border-radius: 0.4rem
     border-style: solid
