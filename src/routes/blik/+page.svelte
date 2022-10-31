@@ -213,6 +213,7 @@ section
     #time_left
         font: 1.3rem $primary-font
         color: $primary-color
+        flex: 1
 .meter
     flex: 10
     box-sizing: content-box
